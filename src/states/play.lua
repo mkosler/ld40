@@ -16,6 +16,8 @@ function Play:update(dt)
 end
 
 function Play:draw()
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.rectangle('fill', love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 100, 100)
 end
 
 function Play:keypressed(key)
