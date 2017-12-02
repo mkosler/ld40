@@ -1,9 +1,12 @@
+local Bucket = require 'src.bucket'
+
 local Play = {}
 
 function Play:init()
 end
 
 function Play:enter(prev)
+    self.bucket = Bucket({200, 200, 200})
 end
 
 function Play:resume()
@@ -16,8 +19,7 @@ function Play:update(dt)
 end
 
 function Play:draw()
-    love.graphics.setColor(255, 255, 255, 255)
-    love.graphics.rectangle('fill', love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 100, 100)
+    self.bucket:draw(Vector(100, 100), 50)
 end
 
 function Play:keypressed(key)

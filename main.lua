@@ -1,4 +1,6 @@
 Gamestate = require 'lib.hump.gamestate'
+Class = require 'lib.hump.class'
+Vector = require 'lib.hump.vector'
 Utils = require 'src.utils'
 STATES = {}
 ASSETS = {}
