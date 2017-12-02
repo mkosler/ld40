@@ -9,5 +9,9 @@ return {
             end
         end
         return nt
+    end,
+
+    clamp = function (x, min, max)
+        return math.max(min, math.min(max, x))
     end
 }
