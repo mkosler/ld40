@@ -52,6 +52,7 @@ end
 function Play:draw()
     self.bucket:draw()
     self.palette:draw()
+    love.graphics.draw(ASSETS['tray'], 30, love.graphics.getHeight() - ASSETS['tray']:getHeight() + 15)
 end
 
 function Play:keypressed(key)

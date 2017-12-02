@@ -26,13 +26,6 @@ return Class{
     end,
 
     draw = function (self)
-        love.graphics.push('all')
-        love.graphics.translate(self.pos.x, self.pos.y)
-        love.graphics.setColor(self.color)
-        love.graphics.circle('fill', 0, 0, self.radius)
-        love.graphics.setColor(255, 255, 255, 255)
-        love.graphics.setLineWidth(5)
-        love.graphics.circle('line', 0, 0, self.radius)
-        love.graphics.pop()
+        love.graphics.draw(ASSETS['soup'], self.pos.x, self.pos.y)
     end
 }
