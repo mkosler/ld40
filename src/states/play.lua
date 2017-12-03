@@ -1,9 +1,5 @@
 local Play = {}
 
-local function hover(x, y, l, t, r, b)
-    return l <= x and x <= r and t <= y and y <= b
-end
-
 function Play:init()
 end
 
@@ -35,7 +31,7 @@ function Play:update(dt)
     self.order.bowl:decay(dt)
 
     if self.selected and love.mouse.isDown(1) then
-        if hover(love.mouse.getX(), love.mouse.getY(), self.order.bowl:bbox()) then
+        if Utils.hover(love.mouse.getX(), love.mouse.getY(), self.order.bowl:bbox()) then
             self.order.bowl:modify(self.selected, 1)
         end
     end

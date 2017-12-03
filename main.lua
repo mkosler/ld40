@@ -23,6 +23,10 @@ ASSETS = {
     ['soup-small'] = love.graphics.newImage('assets/soup-small.png'),
     ['success'] = love.graphics.newImage('assets/success.png'),
     ['failure'] = love.graphics.newImage('assets/failure.png'),
+    ['title-screen'] = love.graphics.newImage('assets/title-screen.png'),
+    ['play-blur'] = love.graphics.newImage('assets/play-blur.png'),
+    ['tutorial-blur'] = love.graphics.newImage('assets/tutorial-blur.png'),
+    ['quit-blur'] = love.graphics.newImage('assets/quit-blur.png'),
 }
 COLORS = {
     red = { 255, 0, 0 },
@@ -35,7 +39,6 @@ COLORS = {
 
 function love.load()
     math.randomseed(os.time())
-    love.graphics.setBackgroundColor(116, 164, 242)
 
     for _,v in ipairs(love.filesystem.getDirectoryItems('src/states')) do
         local name = string.upper(string.match(v, '(.+).lua$'))
@@ -43,7 +46,7 @@ function love.load()
     end
 
     Gamestate.registerEvents()
-    Gamestate.switch(STATES.PREPLAY, 2)
+    Gamestate.switch(STATES.TITLE, 2)
 end
 
 function love.update(dt)

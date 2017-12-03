@@ -57,5 +57,9 @@ return {
             end
             return t
         end,
-    }
+    },
+
+    hover = function(x, y, l, t, r, b)
+        return l <= x and x <= r and t <= y and y <= b
+    end,
 }

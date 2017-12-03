@@ -4,6 +4,7 @@ function Preplay:init()
 end
 
 function Preplay:enter(prev, count)
+    love.graphics.setBackgroundColor(116, 164, 242)
     self.count = count
     self.results = {}
     self.order = Order(count)
