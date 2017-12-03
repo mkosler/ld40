@@ -33,22 +33,48 @@ ASSETS = {
     ['font-18-bold'] = love.graphics.newFont('assets/CaviarDreams_Bold.ttf', 18),
     ['font-30'] = love.graphics.newFont('assets/CaviarDreams.ttf', 30),
     ['font-30-bold'] = love.graphics.newFont('assets/CaviarDreams_Bold.ttf', 30),
-    ['red-cursor'] = love.mouse.newCursor('assets/spicy-cursor.png'),
-    ['green-cursor'] = love.mouse.newCursor('assets/salty-cursor.png'),
-    ['blue-cursor'] = love.mouse.newCursor('assets/acidic-cursor.png'),
+    ['spicy-icon'] = love.graphics.newImage('assets/spicy-cursor.png'),
+    ['salty-icon'] = love.graphics.newImage('assets/salty-cursor.png'),
+    ['acidic-icon'] = love.graphics.newImage('assets/acidic-cursor.png'),
 }
 COLORS = {
     red = { 255, 0, 0 },
     green = { 0, 255, 0 },
     blue = { 0, 0, 255 },
-    yellow = { 255, 255, 0 },
-    fuchisa = { 255, 0, 255 },
-    aqua = { 0, 255, 255 }
 }
 
 function love.load()
     math.randomseed(os.time())
     love.graphics.setFont(ASSETS['font-18-bold'])
+
+    ASSETS['red-cursor'] = love.mouse.newCursor(ASSETS['spicy-icon']:getData())
+    ASSETS['green-cursor'] = love.mouse.newCursor(ASSETS['salty-icon']:getData())
+    ASSETS['blue-cursor'] = love.mouse.newCursor(ASSETS['acidic-icon']:getData())
+
+    -- configure particle systems
+    ASSETS['red-particle'] = love.graphics.newParticleSystem(ASSETS['spicy-icon'], 100)
+    ASSETS['red-particle']:setParticleLifetime(1, 2)
+    ASSETS['red-particle']:setEmissionRate(10)
+    ASSETS['red-particle']:setSizes(0.25)
+    ASSETS['red-particle']:setColors(255, 255, 255, 255, 255, 255, 255, 0)
+    ASSETS['red-particle']:setLinearAcceleration(-70, 25, -10, 100)
+    ASSETS['red-particle']:stop()
+
+    ASSETS['green-particle'] = love.graphics.newParticleSystem(ASSETS['salty-icon'], 100)
+    ASSETS['green-particle']:setParticleLifetime(1, 2)
+    ASSETS['green-particle']:setEmissionRate(10)
+    ASSETS['green-particle']:setSizes(0.25)
+    ASSETS['green-particle']:setColors(255, 255, 255, 255, 255, 255, 255, 0)
+    ASSETS['green-particle']:setLinearAcceleration(-70, 25, -10, 100)
+    ASSETS['green-particle']:stop()
+
+    ASSETS['blue-particle'] = love.graphics.newParticleSystem(ASSETS['acidic-icon'], 100)
+    ASSETS['blue-particle']:setParticleLifetime(1, 2)
+    ASSETS['blue-particle']:setEmissionRate(10)
+    ASSETS['blue-particle']:setSizes(0.25)
+    ASSETS['blue-particle']:setColors(255, 255, 255, 255, 255, 255, 255, 0)
+    ASSETS['blue-particle']:setLinearAcceleration(-70, 25, -10, 100)
+    ASSETS['blue-particle']:stop()
 
     for _,v in ipairs(love.filesystem.getDirectoryItems('src/states')) do
         local name = string.upper(string.match(v, '(.+).lua$'))
@@ -61,4 +87,8 @@ end
 
 function love.update(dt)
     Timer.update(dt)
+end
+
+function love.draw()
+    -- love.graphics.print(love.timer.getFPS())
 end

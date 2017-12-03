@@ -22,6 +22,8 @@ function Play:enter(prev, order, tutorial)
     self.order = order
     self.start = false
 
+    self.particles = nil
+
     local n = #self.order.spices
     local dx = (love.graphics.getWidth() - (n * ASSETS['red-spice']:getWidth())) / (n + 1)
 
@@ -61,6 +63,7 @@ function Play:resume(from)
 end
 
 function Play:leave()
+    if self.particles then self.particles:stop() end
 end
 
 function Play:update(dt)
@@ -70,10 +73,21 @@ function Play:update(dt)
 
         self.order.bowl:decay(dt)
 
-        if self.selected and love.mouse.isDown(1) then
-            if Utils.hover(love.mouse.getX(), love.mouse.getY(), self.order.bowl:bbox()) then
-                self.order.bowl:modify(self.selected, 1)
-                if self.tutorial then Signal.emit('left-click') end
+        if self.particles then self.particles:update(dt) end
+
+        if self.selected then
+            if love.mouse.isDown(1) then
+                if self.particles then
+                    if not self.particles:isActive() then self.particles:start() end
+                    -- self.particles:setPosition(love.mouse.getX(), love.mouse.getY())
+                end
+
+                if Utils.hover(love.mouse.getX(), love.mouse.getY(), self.order.bowl:bbox()) then
+                    self.order.bowl:modify(self.selected, 1)
+                    if self.tutorial then Signal.emit('left-click') end
+                end
+            else
+                self.particles:pause()
             end
         end
     end
@@ -85,6 +99,7 @@ function Play:draw()
     love.graphics.push('all')
     self.order.bowl:draw()
     Utils.foreach(self.order.spices, 'draw')
+    if self.particles then love.graphics.draw(self.particles, love.mouse.getX(), love.mouse.getY()) end
     self.timeLabel:draw()
     self.scoreLabel:draw()
 
@@ -119,6 +134,11 @@ function Play:mousepressed(x, y, btn)
         for k,v in pairs(self.order.spices) do
             if Utils.hover(x, y, v:bbox()) then
                 self.selected = v:select()
+                if self.particles and self.particles:isActive() then
+                    self.particles:stop()
+                end
+                self.particles = ASSETS[self.selected..'-particle']
+                self.particles:reset()
                 love.mouse.setCursor(ASSETS[self.selected..'-cursor'])
                 if self.tutorial then Signal.emit('right-click', self.selected) end
             end
