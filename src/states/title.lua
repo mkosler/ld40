@@ -24,6 +24,7 @@ function Title:init()
 end
 
 function Title:enter(prev)
+    love.mouse.setCursor()
     love.graphics.setBackgroundColor(211, 188, 141)
 end
 

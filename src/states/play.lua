@@ -20,6 +20,7 @@ function Play:enter(prev, order, tutorial)
     self.prev = prev
     self.selected = nil
     self.order = order
+    self.start = false
 
     local n = #self.order.spices
     local dx = (love.graphics.getWidth() - (n * ASSETS['red-spice']:getWidth())) / (n + 1)
