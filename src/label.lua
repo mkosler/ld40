@@ -1,5 +1,6 @@
 return Class{
     init = function (self, font, padding)
+        font = font or love.graphics.getFont()
         self.pos = Vector(0, 0)
         self.text = love.graphics.newText(font, nil)
         self.padding = padding or 10
@@ -16,6 +17,25 @@ return Class{
 
     getHeight = function (self)
         return self.text:getHeight() + (self.padding * 2)
+    end,
+
+    centerOnScreen = function (self)
+        self:center(love.graphics.getWidth(), love.graphics.getHeight())
+    end,
+
+    center = function (self, x, y, width, height)
+        if not width then
+            width = x
+            x = 0
+        end
+
+        if not height then
+            height = y
+            y = 0
+        end
+
+        self.pos.x = (width / 2 - self:getWidth() / 2) + x
+        self.pos.y = (height / 2 - self:getHeight() / 2) + y
     end,
 
     draw = function (self)

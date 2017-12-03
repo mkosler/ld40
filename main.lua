@@ -2,6 +2,7 @@ Gamestate = require 'lib.hump.gamestate'
 Class = require 'lib.hump.class'
 Vector = require 'lib.hump.vector'
 Timer = require 'lib.hump.timer'
+Signal = require 'lib.hump.signal'
 Utils = require 'src.utils'
 Bowl = require 'src.bowl'
 Spice = require 'src.spice'
@@ -32,6 +33,9 @@ ASSETS = {
     ['font-18-bold'] = love.graphics.newFont('assets/CaviarDreams_Bold.ttf', 18),
     ['font-30'] = love.graphics.newFont('assets/CaviarDreams.ttf', 30),
     ['font-30-bold'] = love.graphics.newFont('assets/CaviarDreams_Bold.ttf', 30),
+    ['red-cursor'] = love.mouse.newCursor('assets/spicy-cursor.png'),
+    ['green-cursor'] = love.mouse.newCursor('assets/salty-cursor.png'),
+    ['blue-cursor'] = love.mouse.newCursor('assets/acidic-cursor.png'),
 }
 COLORS = {
     red = { 255, 0, 0 },
@@ -44,6 +48,7 @@ COLORS = {
 
 function love.load()
     math.randomseed(os.time())
+    love.graphics.setFont(ASSETS['font-18-bold'])
 
     for _,v in ipairs(love.filesystem.getDirectoryItems('src/states')) do
         local name = string.upper(string.match(v, '(.+).lua$'))

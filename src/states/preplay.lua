@@ -15,7 +15,9 @@ function Preplay:enter(prev, count, tutorial)
     Gamestate.push(STATES.PLAY, self.order:getNextOrder(), tutorial)
 end
 
-function Preplay:resume(one, result)
+function Preplay:resume(from, result, tutorial)
+    if tutorial then Gamestate.switch(STATES.TITLE) end
+
     table.insert(self.results, result)
 
     local nOrder = self.order:getNextOrder()

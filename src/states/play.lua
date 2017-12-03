@@ -4,6 +4,7 @@ function Play:init()
 end
 
 function Play:enter(prev, order, tutorial)
+    love.mouse.setCursor()
     self.tutorial = tutorial or false
 
     self.time = 0
@@ -13,7 +14,7 @@ function Play:enter(prev, order, tutorial)
 
     self.score = 0
     self.scoreLabel = Label(ASSETS['font-30'])
-    self.scoreLabel:setf(string.format('%04d', 0), 100)
+    self.scoreLabel:setf(string.format('$%05.2f', 0), 100)
     self.scoreLabel.pos = Vector(love.graphics.getWidth() - self.scoreLabel:getWidth() - 10, love.graphics.getHeight() - self.scoreLabel:getHeight() - 10)
 
     self.prev = prev
@@ -47,11 +48,15 @@ function Play:enter(prev, order, tutorial)
         wait(1)
         self.start = true
         if self.tutorial then
+            Gamestate.push(STATES.TUTORIAL)
         end
     end)
 end
 
-function Play:resume()
+function Play:resume(from)
+    if from == STATES.TUTORIAL then
+        Gamestate.pop(false, true)
+    end
 end
 
 function Play:leave()
@@ -67,6 +72,7 @@ function Play:update(dt)
         if self.selected and love.mouse.isDown(1) then
             if Utils.hover(love.mouse.getX(), love.mouse.getY(), self.order.bowl:bbox()) then
                 self.order.bowl:modify(self.selected, 1)
+                if self.tutorial then Signal.emit('left-click') end
             end
         end
     end
@@ -76,8 +82,6 @@ function Play:draw()
     self.prev:draw()
 
     love.graphics.push('all')
-    love.graphics.setColor(255, 255, 255)
-    if self.selected then love.graphics.print(self.selected, 10, 10) end
     self.order.bowl:draw()
     Utils.foreach(self.order.spices, 'draw')
     self.timeLabel:draw()
@@ -95,6 +99,8 @@ function Play:draw()
 end
 
 function Play:keypressed(key)
+    if not self.start then return end
+
     if key == 'space' then
         if self.order.bowl:isBalanced() then
             Gamestate.pop(true)
@@ -110,8 +116,10 @@ end
 function Play:mousepressed(x, y, btn)
     if btn == 2 then
         for k,v in pairs(self.order.spices) do
-            if hover(x, y, v:bbox()) then
+            if Utils.hover(x, y, v:bbox()) then
                 self.selected = v:select()
+                love.mouse.setCursor(ASSETS[self.selected..'-cursor'])
+                if self.tutorial then Signal.emit('right-click', self.selected) end
             end
         end
     end

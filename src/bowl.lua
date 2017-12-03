@@ -2,12 +2,6 @@ local COLOR_DELTA = {
     red = { 1, 0, 0 },
     green = { 0, 1, 0 },
     blue = { 0, 0, 1 },
-    -- red     = {  1.00, -0.25, -0.25 },
-    -- green   = { -0.25,  1.00, -0.25 },
-    -- blue    = { -0.25, -0.25,  1.00 },
-    -- yellow  = {  0.50,  0.50, -0.50 },
-    -- fuchisa = {  0.50, -0.50,  0.50 },
-    -- aqua    = { -0.50,  0.50,  0.50 },
 }
 
 return Class{
@@ -19,9 +13,19 @@ return Class{
     end,
 
     isBalanced = function (self)
-        return self.levels.spicy.min <= self.current[1] and self.current[1] <= self.levels.spicy.max and
-               self.levels.salty.min <= self.current[2] and self.current[2] <= self.levels.salty.max and
-               self.levels.acidic.min <= self.current[3] and self.current[3] <= self.levels.acidic.max
+        return self:isLevelBalanced('spicy') and self:isLevelBalanced('salty') and self:isLevelBalanced('acidic')
+    end,
+
+    isLevelBalanced = function (self, level)
+        if level == 'spicy' then
+            return self.levels.spicy.min <= self.current[1] and self.current[1] <= self.levels.spicy.max
+        elseif level == 'salty' then
+            return self.levels.salty.min <= self.current[2] and self.current[2] <= self.levels.salty.max
+        elseif level == 'acidic' then
+            return self.levels.acidic.min <= self.current[3] and self.current[3] <= self.levels.acidic.max
+        else
+            error('Unknown spicy type')
+        end
     end,
 
     decay = function (self, dt)
