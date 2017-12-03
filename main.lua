@@ -4,7 +4,8 @@ Vector = require 'lib.hump.vector'
 Timer = require 'lib.hump.timer'
 Utils = require 'src.utils'
 Bowl = require 'src.bowl'
-Level = require 'src.level'
+Spice = require 'src.spice'
+Order = require 'src.order'
 
 STATES = {}
 ASSETS = {
@@ -19,6 +20,9 @@ ASSETS = {
     ['order'] = love.graphics.newImage('assets/order.png'),
     ['progress'] = love.graphics.newImage('assets/progress.png'),
     ['bracket'] = love.graphics.newImage('assets/bracket.png'),
+    ['soup-small'] = love.graphics.newImage('assets/soup-small.png'),
+    ['success'] = love.graphics.newImage('assets/success.png'),
+    ['failure'] = love.graphics.newImage('assets/failure.png'),
 }
 COLORS = {
     red = { 255, 0, 0 },
@@ -30,6 +34,7 @@ COLORS = {
 }
 
 function love.load()
+    math.randomseed(os.time())
     love.graphics.setBackgroundColor(116, 164, 242)
 
     for _,v in ipairs(love.filesystem.getDirectoryItems('src/states')) do
@@ -38,7 +43,7 @@ function love.load()
     end
 
     Gamestate.registerEvents()
-    Gamestate.switch(STATES.PLAY)
+    Gamestate.switch(STATES.PREPLAY, 2)
 end
 
 function love.update(dt)

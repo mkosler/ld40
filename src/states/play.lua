@@ -1,37 +1,28 @@
 local Play = {}
 
+local function hover(x, y, l, t, r, b)
+    return l <= x and x <= r and t <= y and y <= b
+end
+
 function Play:init()
 end
 
-function Play:enter(prev)
-    self.level = Level.generateSpecific(1, { red, green, blue })
-    self.bowl = self.level:getNextBowl()
-    self.bowl.pos.x = love.graphics.getWidth() / 2 - ASSETS['soup']:getWidth() / 2
-    self.bowl.pos.y = love.graphics.getHeight() / 2 - ASSETS['soup']:getHeight() / 2
+function Play:enter(prev, order)
+    self.prev = prev
+    self.selected = nil
+    self.order = order
 
-    -- self.bucket = Bucket({200, 200, 200}, Vector(100, 100), 50)
-    -- self.palette = Palette({
-    --     {
-    --         color = 'red',
-    --         capacity = 100,
-    --         amount = 100
-    --     },
-    --     {
-    --         color = 'green',
-    --         capacity = 100,
-    --         amount = 100
-    --     },
-    --     {
-    --         color = 'blue',
-    --         capacity = 100,
-    --         amount = 100
-    --     },
-    --     {
-    --         color = 'yellow',
-    --         capacity = 100,
-    --         amount = 100
-    --     }
-    -- }, Vector(400, 400))
+    local n = #self.order.spices
+    local dx = (love.graphics.getWidth() - (n * ASSETS['red-spice']:getWidth())) / (n + 1)
+
+    for i,v in ipairs(self.order.spices) do
+        local j = i - 1
+        v.pos.x = (j * ASSETS['red-spice']:getWidth()) + ((j + 1) * dx)
+        v.pos.y = love.graphics.getHeight() - ASSETS['red-spice']:getHeight() - 50
+    end
+
+    self.order.bowl.pos.x = love.graphics.getWidth() / 2 - ASSETS['soup']:getWidth() / 2
+    self.order.bowl.pos.y = love.graphics.getHeight() / 2 - ASSETS['soup']:getHeight() / 2 - 100
 end
 
 function Play:resume()
@@ -41,26 +32,47 @@ function Play:leave()
 end
 
 function Play:update(dt)
-    -- if love.mouse.isDown(1) and hoverCircle(love.mouse.getX(), love.mouse.getY(), self.bucket.pos.x, self.bucket.pos.y, self.bucket.radius) then
-    --     -- self.currentColor = self.palette:use(1)
-    --     -- self.bowls[1]:modify(self.palette:use(1), 1)
-    -- end
+    self.order.bowl:decay(dt)
+
+    if self.selected and love.mouse.isDown(1) then
+        if hover(love.mouse.getX(), love.mouse.getY(), self.order.bowl:bbox()) then
+            self.order.bowl:modify(self.selected, 1)
+        end
+    end
 end
 
 function Play:draw()
-    -- Utils.map(self.bowls, 'draw')
-    -- self.palette:draw()
-    self.bowl:draw()
-    -- love.graphics.draw(ASSETS['tray'], 30, love.graphics.getHeight() - ASSETS['tray']:getHeight() + 15)
+    self.prev:draw()
+
+    love.graphics.push('all')
+    love.graphics.setColor(255, 255, 255)
+    if self.selected then love.graphics.print(self.selected, 10, 10) end
+    self.order.bowl:draw()
+    Utils.foreach(self.order.spices, 'draw')
+    love.graphics.pop()
 end
 
 function Play:keypressed(key)
+    if key == 'space' then
+        if self.order.bowl:isBalanced() then
+            Gamestate.pop(true)
+        else
+            Gamestate.pop(false)
+        end
+    end
 end
 
 function Play:keyreleased(key)
 end
 
 function Play:mousepressed(x, y, btn)
+    if btn == 2 then
+        for k,v in pairs(self.order.spices) do
+            if hover(x, y, v:bbox()) then
+                self.selected = v:select()
+            end
+        end
+    end
 end
 
 function Play:mousereleased(x, y, btn)

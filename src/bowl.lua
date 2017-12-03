@@ -1,17 +1,41 @@
 local COLOR_DELTA = {
-    red     = {  1.0, -0.5, -0.5 },
-    green   = { -0.5,  1.0, -0.5 },
-    blue    = { -0.5, -0.5,  1.0 },
-    yellow  = {  0.5,  0.5, -1.0 },
-    fuchisa = {  0.5, -1.0,  0.5 },
-    aqua    = { -1.0,  0.5,  0.5 },
+    red = { 1, 0, 0 },
+    green = { 0, 1, 0 },
+    blue = { 0, 0, 1 },
+    -- red     = {  1.00, -0.25, -0.25 },
+    -- green   = { -0.25,  1.00, -0.25 },
+    -- blue    = { -0.25, -0.25,  1.00 },
+    -- yellow  = {  0.50,  0.50, -0.50 },
+    -- fuchisa = {  0.50, -0.50,  0.50 },
+    -- aqua    = { -0.50,  0.50,  0.50 },
 }
 
 return Class{
-    init = function (self, levels, pos)
+    init = function (self, levels)
         self.levels = levels
-        self.pos = pos
+        self.pos = Vector(0, 0)
+
+        self:reset()
+    end,
+
+    isBalanced = function (self)
+        return self.levels.spicy.min <= self.current[1] and self.current[1] <= self.levels.spicy.max and
+               self.levels.salty.min <= self.current[2] and self.current[2] <= self.levels.salty.max and
+               self.levels.acidic.min <= self.current[3] and self.current[3] <= self.levels.acidic.max
+    end,
+
+    decay = function (self, dt)
+        self.current[1] = math.max(0, self.current[1] - 5 * dt)
+        self.current[2] = math.max(0, self.current[2] - 5 * dt)
+        self.current[3] = math.max(0, self.current[3] - 5 * dt)
+    end,
+
+    reset = function (self)
         self.current = { 0, 0, 0 }
+    end,
+
+    bbox = function (self)
+        return self.pos.x, self.pos.y, self.pos.x + ASSETS['soup']:getWidth(), self.pos.y + ASSETS['soup']:getHeight()
     end,
 
     modify = function (self, color, rate)
