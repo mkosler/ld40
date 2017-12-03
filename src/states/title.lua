@@ -5,13 +5,13 @@ function Title:init()
         play = {
             bbox = { 120, 301, 593, 361 },
             callback = function ()
-                Gamestate.switch(STATES.PREPLAY, 3)
+                Gamestate.switch(STATES.PLAY, 1)
             end,
         },
         tutorial = {
             bbox = { 120, 427, 593, 487 },
             callback = function ()
-                Gamestate.switch(STATES.PREPLAY, 1, true)
+                Gamestate.switch(STATES.PLAY, 1, true)
             end,
         },
         quit = {
