@@ -3,14 +3,15 @@ local Title = {}
 function Title:init()
     self.buttons = {
         play = {
-            bbox = { 120, 300, 593, 360 },
+            bbox = { 120, 301, 593, 361 },
             callback = function ()
                 Gamestate.switch(STATES.PREPLAY, 3)
             end,
         },
         tutorial = {
-            bbox = { 120, 426, 593, 486 },
+            bbox = { 120, 427, 593, 487 },
             callback = function ()
+                Gamestate.switch(STATES.PREPLAY, 1, true)
             end,
         },
         quit = {
@@ -44,8 +45,15 @@ end
 function Title:draw()
     love.graphics.draw(ASSETS['title-screen'])
 
+    -- love.graphics.push('all')
+    -- love.graphics.setColor(255, 0, 0)
+    -- for k,v in pairs(self.buttons) do
+    --     love.graphics.rectangle('line', v.bbox[1], v.bbox[2], v.bbox[3] - v.bbox[1], v.bbox[4] - v.bbox[2])
+    -- end
+    -- love.graphics.pop()
+
     if self.hover then
-        love.graphics.draw(ASSETS[self.hover..'-blur'], self.buttons[self.hover].bbox[1] - 3, self.buttons[self.hover].bbox[2] - 4)
+        love.graphics.draw(ASSETS[self.hover..'-blur'], self.buttons[self.hover].bbox[1], self.buttons[self.hover].bbox[2])
     end
 end
 

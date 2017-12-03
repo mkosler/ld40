@@ -3,14 +3,16 @@ local Preplay = {}
 function Preplay:init()
 end
 
-function Preplay:enter(prev, count)
+function Preplay:enter(prev, count, tutorial)
+    self.tutorial = tutorial or false
+
     love.graphics.setBackgroundColor(116, 164, 242)
     self.count = count
     self.results = {}
     self.order = Order(count)
     self.dt = (love.graphics.getWidth() - (10 * ASSETS['soup-small']:getWidth())) / 11
 
-    Gamestate.push(STATES.PLAY, self.order:getNextOrder())
+    Gamestate.push(STATES.PLAY, self.order:getNextOrder(), tutorial)
 end
 
 function Preplay:resume(one, result)

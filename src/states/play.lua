@@ -3,7 +3,19 @@ local Play = {}
 function Play:init()
 end
 
-function Play:enter(prev, order)
+function Play:enter(prev, order, tutorial)
+    self.tutorial = tutorial or false
+
+    self.time = 0
+    self.timeLabel = Label(ASSETS['font-30'])
+    self.timeLabel:setf(string.format('%05.2f', 0), 100)
+    self.timeLabel.pos = Vector(10, love.graphics.getHeight() - self.timeLabel:getHeight() - 10)
+
+    self.score = 0
+    self.scoreLabel = Label(ASSETS['font-30'])
+    self.scoreLabel:setf(string.format('%04d', 0), 100)
+    self.scoreLabel.pos = Vector(love.graphics.getWidth() - self.scoreLabel:getWidth() - 10, love.graphics.getHeight() - self.scoreLabel:getHeight() - 10)
+
     self.prev = prev
     self.selected = nil
     self.order = order
@@ -19,6 +31,24 @@ function Play:enter(prev, order)
 
     self.order.bowl.pos.x = love.graphics.getWidth() / 2 - ASSETS['soup']:getWidth() / 2
     self.order.bowl.pos.y = love.graphics.getHeight() / 2 - ASSETS['soup']:getHeight() / 2 - 100
+
+    self.label = nil
+
+    Timer.script(function (wait)
+        self.label = Label(ASSETS['font-30-bold'])
+        self.label:setf('Ready...', 120)
+        self.label.pos = Vector(love.graphics.getWidth() / 2 - self.label:getWidth() / 2, love.graphics.getHeight() / 2 - self.label:getHeight() / 2)
+        wait(1)
+        self.label:setf('Set...', 120)
+        self.label.pos = Vector(love.graphics.getWidth() / 2 - self.label:getWidth() / 2, love.graphics.getHeight() / 2 - self.label:getHeight() / 2)
+        wait(1)
+        self.label:setf('Go!', 120)
+        self.label.pos = Vector(love.graphics.getWidth() / 2 - self.label:getWidth() / 2, love.graphics.getHeight() / 2 - self.label:getHeight() / 2)
+        wait(1)
+        self.start = true
+        if self.tutorial then
+        end
+    end)
 end
 
 function Play:resume()
@@ -28,11 +58,16 @@ function Play:leave()
 end
 
 function Play:update(dt)
-    self.order.bowl:decay(dt)
+    if self.start then
+        self.time = self.time + dt
+        self.timeLabel:setf(string.format('%05.2f', self.time), 100)
 
-    if self.selected and love.mouse.isDown(1) then
-        if Utils.hover(love.mouse.getX(), love.mouse.getY(), self.order.bowl:bbox()) then
-            self.order.bowl:modify(self.selected, 1)
+        self.order.bowl:decay(dt)
+
+        if self.selected and love.mouse.isDown(1) then
+            if Utils.hover(love.mouse.getX(), love.mouse.getY(), self.order.bowl:bbox()) then
+                self.order.bowl:modify(self.selected, 1)
+            end
         end
     end
 end
@@ -45,6 +80,17 @@ function Play:draw()
     if self.selected then love.graphics.print(self.selected, 10, 10) end
     self.order.bowl:draw()
     Utils.foreach(self.order.spices, 'draw')
+    self.timeLabel:draw()
+    self.scoreLabel:draw()
+
+    if not self.start then
+        self.label:draw()
+    end
+
+    -- love.graphics.setColor(0, 255, 0)
+    -- love.graphics.line(love.graphics.getWidth() / 2, 0, love.graphics.getWidth() / 2, love.graphics.getHeight())
+    -- love.graphics.line(0, love.graphics.getHeight() / 2, love.graphics.getWidth(), love.graphics.getHeight() / 2)
+
     love.graphics.pop()
 end
 

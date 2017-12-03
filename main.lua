@@ -6,6 +6,7 @@ Utils = require 'src.utils'
 Bowl = require 'src.bowl'
 Spice = require 'src.spice'
 Order = require 'src.order'
+Label = require 'src.label'
 
 STATES = {}
 ASSETS = {
@@ -27,6 +28,10 @@ ASSETS = {
     ['play-blur'] = love.graphics.newImage('assets/play-blur.png'),
     ['tutorial-blur'] = love.graphics.newImage('assets/tutorial-blur.png'),
     ['quit-blur'] = love.graphics.newImage('assets/quit-blur.png'),
+    ['font-18'] = love.graphics.newFont('assets/CaviarDreams.ttf', 18),
+    ['font-18-bold'] = love.graphics.newFont('assets/CaviarDreams_Bold.ttf', 18),
+    ['font-30'] = love.graphics.newFont('assets/CaviarDreams.ttf', 30),
+    ['font-30-bold'] = love.graphics.newFont('assets/CaviarDreams_Bold.ttf', 30),
 }
 COLORS = {
     red = { 255, 0, 0 },
