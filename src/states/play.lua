@@ -31,9 +31,18 @@ function Play:enter(prev, count, tutorial)
     self.scoreLabel:setf(string.format('$%05.2f', self.score), 100)
     self.scoreLabel.pos = Vector(love.graphics.getWidth() - self.scoreLabel:getWidth() - 10, love.graphics.getHeight() - self.scoreLabel:getHeight() - 10)
     self.chain = 1
+    self.additions = {}
 
     Signal.register('nextOrder', function (result)
-        self.order = self.table:getNextOrder()
+        local no = self.table:getNextOrder()
+
+        if not no then
+            Gamestate.switch(STATES.VICTORY, self.additions, self.score)
+            return
+        end
+
+        self.time = 0
+        self.order = no
 
         local n = #self.order.spices
         local dx = (love.graphics.getWidth() - (n * ASSETS['red-spice']:getWidth())) / (n + 1)
@@ -60,7 +69,8 @@ function Play:enter(prev, count, tutorial)
     self.particles = nil
 
     self.scoreSignal = Signal.register('score', function ()
-        local addition = self.chain * 5 / self.time / 10
+        local addition = self.chain * 5 / (self.time / 10)
+        table.insert(self.additions, addition)
         table.insert(self.textFades, {
             text = string.format('+$%05.2f', addition),
             color = { 0, 255, 0, 255 },
@@ -109,6 +119,7 @@ end
 function Play:leave()
     if self.particles then self.particles:stop() end
     Signal.clear('score')
+    Signal.clear('nextOrder')
 end
 
 function Play:update(dt)
@@ -194,6 +205,7 @@ function Play:keypressed(key)
             Signal.emit('nextOrder')
         else
             self.chain = 1
+            table.insert(self.additions, 0)
             table.insert(self.results, false)
             Signal.emit('nextOrder')
         end
@@ -204,6 +216,8 @@ function Play:keyreleased(key)
 end
 
 function Play:mousepressed(x, y, btn)
+    if not self.start then return end
+
     if btn == 2 then
         for k,v in pairs(self.order.spices) do
             if Utils.hover(x, y, v:bbox()) then

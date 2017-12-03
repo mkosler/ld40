@@ -36,6 +36,8 @@ ASSETS = {
     ['spicy-icon'] = love.graphics.newImage('assets/spicy-cursor.png'),
     ['salty-icon'] = love.graphics.newImage('assets/salty-cursor.png'),
     ['acidic-icon'] = love.graphics.newImage('assets/acidic-cursor.png'),
+    ['return-blur'] = love.graphics.newImage('assets/return-blur.png'),
+    ['paycheck'] = love.graphics.newImage('assets/paycheck.png'),
 }
 COLORS = {
     red = { 255, 0, 0 },

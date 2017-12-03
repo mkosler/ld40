@@ -5,7 +5,7 @@ function Title:init()
         play = {
             bbox = { 120, 301, 593, 361 },
             callback = function ()
-                Gamestate.switch(STATES.PLAY, 1)
+                Gamestate.switch(STATES.PLAY, 10)
             end,
         },
         tutorial = {
