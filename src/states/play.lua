@@ -17,6 +17,8 @@ end
 
 function Play:enter(prev, count, tutorial)
     love.mouse.setCursor()
+    ASSETS['loop-sfx']:rewind()
+    ASSETS['loop-sfx']:play()
     love.graphics.setBackgroundColor(116, 164, 242)
     self.tutorial = tutorial or false
 
@@ -69,6 +71,7 @@ function Play:enter(prev, count, tutorial)
     self.particles = nil
 
     self.scoreSignal = Signal.register('score', function ()
+        ASSETS['success-sfx']:play()
         local addition = self.chain * 5 / (self.time / 10)
         table.insert(self.additions, addition)
         table.insert(self.textFades, {
@@ -207,6 +210,7 @@ function Play:keypressed(key)
             self.chain = 1
             table.insert(self.additions, 0)
             table.insert(self.results, false)
+            ASSETS['failure-sfx']:play()
             Signal.emit('nextOrder')
         end
     end

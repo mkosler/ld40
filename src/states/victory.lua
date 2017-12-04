@@ -1,6 +1,6 @@
-local Title = {}
+local Victory = {}
 
-function Title:init()
+function Victory:init()
     self.buttons = {
         ['return'] = {
             bbox = { 274, 636, 747, 696 },
@@ -11,7 +11,7 @@ function Title:init()
     }
 end
 
-function Title:enter(prev, results, score)
+function Victory:enter(prev, results, score)
     love.mouse.setCursor()
     self.prev = prev
     self.results = results
@@ -30,14 +30,15 @@ function Title:enter(prev, results, score)
     end, #self.results)
 end
 
-function Title:resume()
+function Victory:resume()
 end
 
-function Title:leave()
+function Victory:leave()
     self.timer:clear()
+    ASSETS['loop-sfx']:stop()
 end
 
-function Title:update(dt)
+function Victory:update(dt)
     self.timer:update(dt)
 
     self.hover = nil
@@ -48,7 +49,7 @@ function Title:update(dt)
     end
 end
 
-function Title:draw()
+function Victory:draw()
     self.prev:draw()
 
     love.graphics.push('all')
@@ -83,13 +84,13 @@ function Title:draw()
     end
 end
 
-function Title:keypressed(key)
+function Victory:keypressed(key)
 end
 
-function Title:keyreleased(key)
+function Victory:keyreleased(key)
 end
 
-function Title:mousepressed(x, y, btn)
+function Victory:mousepressed(x, y, btn)
     for k,v in pairs(self.buttons) do
         if Utils.hover(x, y, unpack(v.bbox)) then
             v.callback()
@@ -97,7 +98,7 @@ function Title:mousepressed(x, y, btn)
     end
 end
 
-function Title:mousereleased(x, y, btn)
+function Victory:mousereleased(x, y, btn)
 end
 
-return Title
+return Victory

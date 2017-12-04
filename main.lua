@@ -38,6 +38,9 @@ ASSETS = {
     ['acidic-icon'] = love.graphics.newImage('assets/acidic-cursor.png'),
     ['return-blur'] = love.graphics.newImage('assets/return-blur.png'),
     ['paycheck'] = love.graphics.newImage('assets/paycheck.png'),
+    ['success-sfx'] = love.audio.newSource('assets/success.ogg', 'static'),
+    ['failure-sfx'] = love.audio.newSource('assets/failure.ogg', 'static'),
+    ['loop-sfx'] = love.audio.newSource('assets/loop.ogg'),
 }
 COLORS = {
     red = { 255, 0, 0 },
@@ -83,6 +86,8 @@ function love.load()
         STATES[name] = require('src/states/'..name)
     end
 
+    mute = false
+
     Gamestate.registerEvents()
     Gamestate.switch(STATES.TITLE, 2)
 end
@@ -93,4 +98,11 @@ end
 
 function love.draw()
     -- love.graphics.print(love.timer.getFPS())
+end
+
+function love.keypressed(key)
+    if key == 'm' then
+        mute = not mute
+        ASSETS['loop-sfx']:setVolume(mute and 1 or 0)
+    end
 end
