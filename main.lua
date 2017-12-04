@@ -43,9 +43,9 @@ ASSETS = {
     ['acidic-icon'] = love.graphics.newImage('assets/acidic-cursor.png'),
     ['return-blur'] = love.graphics.newImage('assets/return-blur.png'),
     ['paycheck'] = love.graphics.newImage('assets/paycheck.png'),
-    ['success-sfx'] = love.audio.newSource('assets/success.ogg', 'static'),
-    ['failure-sfx'] = love.audio.newSource('assets/failure.ogg', 'static'),
-    ['loop-sfx'] = love.audio.newSource('assets/loop.ogg'),
+    ['success-sfx'] = love.audio.newSource('assets/success.wav', 'static'),
+    ['failure-sfx'] = love.audio.newSource('assets/failure.wav', 'static'),
+    ['loop-sfx'] = love.audio.newSource('assets/loop.wav'),
 }
 COLORS = {
     red = { 255, 0, 0 },
