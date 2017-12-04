@@ -9,7 +9,12 @@ Spice = require 'src.spice'
 Order = require 'src.order'
 Label = require 'src.label'
 
-STATES = {}
+STATES = {
+    PLAY = require 'src.states.play',
+    TITLE = require 'src.states.title',
+    TUTORIAL = require 'src.states.tutorial',
+    VICTORY = require 'src.states.victory',
+}
 ASSETS = {
     ['soup'] = love.graphics.newImage('assets/soup.png'),
     ['tray'] = love.graphics.newImage('assets/tray.png'),
@@ -81,10 +86,10 @@ function love.load()
     ASSETS['blue-particle']:setLinearAcceleration(-70, 25, -10, 100)
     ASSETS['blue-particle']:stop()
 
-    for _,v in ipairs(love.filesystem.getDirectoryItems('src/states')) do
-        local name = string.upper(string.match(v, '(.+).lua$'))
-        STATES[name] = require('src/states/'..name)
-    end
+    -- for _,v in ipairs(love.filesystem.getDirectoryItems('src/states')) do
+    --     local name = string.upper(string.match(v, '(.+).lua$'))
+    --     STATES[name] = require('src/states/'..name)
+    -- end
 
     mute = false
 

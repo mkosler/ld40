@@ -3,4 +3,4 @@
 ## Licenses
 
 * See LICENSE
-* For LÖVE licenses, see dist/license.txt
+* For LÖVE licenses, see license.txt
